@@ -1,0 +1,81 @@
+/*
+  Movimentação do carro-robô para FRENTE, TRÁS, ESQUERDA e DIREITA 
+  Controlado pela tempo.
+*/
+
+#include <RobotCar.h>
+
+RobotCar robotcar;
+
+char c, ch; //Variável para armazenar os caracteres lidos
+int time=0, i, tempo;
+char buf1[10];
+
+void setup(){
+  
+  Serial.begin(9600); //Inicia a serial com um Baud Rate de 9600bps
+  robotcar.StopMotor1();
+  robotcar.StopMotor2();
+
+  
+}
+
+int serial_read1(){
+  delay(50);
+  while(Serial.available()>0){
+      ch = Serial.read();
+      buf1[i] = ch;
+      i++;
+  } 
+  buf1[i] = '\0';
+  i = 0;
+  time = atoi(buf1);
+  
+  return time;
+}
+ 
+
+void loop(){
+  
+  if (Serial.available() > 0){
+    
+    c = Serial.read();
+      
+    switch(c){
+       
+      case 'w':
+          tempo = serial_read1();  
+          robotcar.MoveMotor1(170, 0);
+          robotcar.MoveMotor2(170, 0);
+          delay(tempo);
+          break;  
+          
+      case 's':  //Rear   
+          tempo = serial_read1();
+          robotcar.MoveMotor1(170, 1);
+          robotcar.MoveMotor2(170, 1);
+          delay(tempo);
+          break;
+        
+      case 'a':  //Left
+          tempo = serial_read1();
+          robotcar.MoveMotor1(170, 0);
+          robotcar.MoveMotor2(70, 0);
+          delay(tempo);
+          break;
+        
+      case 'd':   //Right
+          tempo = serial_read1();
+          robotcar.MoveMotor1(70, 0);
+          robotcar.MoveMotor2(170, 0);
+          delay(tempo);
+          break;
+    }
+    
+    robotcar.StopMotor1();
+    robotcar.StopMotor2();
+ 
+    //c = 0; //Limpa a variável 
+    //tempo = 0;
+  }  
+}
